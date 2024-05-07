@@ -13,7 +13,6 @@
     <modules>
         <module>db-spring-boot-autoconfigure</module>
         <module>db-spring-boot-starter</module>
-        <module>db-spring-boot-samples</module>
     </modules>
 
     <properties>

@@ -56,6 +56,7 @@
 <body>
 <div class="ui middle aligned center aligned grid">
     <div class="column transition hidden">
+<#--        用户名密码登录-->
         <form id="form" class="ui large form" action="login" method="post" style="border: 0">
             <div class="ui stacked segment">
                 <h3 class="title"> 授权中心 </h3>
@@ -70,14 +71,16 @@
                         <i class="lock icon"></i>
                         <input type="password" id="password" name="password" placeholder="密码" value="123456">
                     </div>
-                    <div class="other">忘记密码？试试 &nbsp;<a href="javascript:void(0);" onclick="change_yzm()"><i class="mobile icon"></i>验证码登陆</a>|<a><i class="qrcode icon"></i>扫码登陆</a></div>
+                    <div class="other">忘记密码？试试 &nbsp;<a href="javascript:void(0);" onclick="change_yzm()"><i class="mobile icon"></i>验证码登陆</a>|
+                        <a href="javascript:void(0);" onclick="change_qr()"><i class="qrcode icon"></i>扫码登陆</a></div>
+
                 </div>
 
                 <div id="submit" class="ui fluid large teal submit button login">登录</div>
             </div>
             <div class="ui error message"></div>
         </form>
-
+<#--        验证码登录-->
         <form id="form1" class="ui large form transition hidden" action="phoneLogin" method="post" style="border: 0;">
             <div class="ui stacked segment">
                 <h3 class="title"> 授权中心 </h3>
@@ -93,7 +96,7 @@
                         <input type="text" id="verifyCode" name="verifyCode" placeholder="验证码" value="1000">
                         <button id="send_btn" type="button" class="ui basic active button" onclick="send_yzm()">点击获取验证码</button>
                     </div>
-                    <div class="other">返回 &nbsp;<a href="javascript:void(0);" onclick="change_default()"><i class="user icon"></i>账号密码</a>| <a><i class="qrcode icon"></i>扫码登陆</a></div>
+                    <div class="other">返回 &nbsp;<a href="javascript:void(0);" onclick="phone_to_default()"><i class="user icon"></i>账号密码</a></div>
                 </div>
 
                 <div id="submit1" class="ui fluid large teal submit button login">登录</div>
@@ -102,6 +105,23 @@
             <div class="ui error message"></div>
 
         </form>
+<#--        扫描码登录-->
+        <form id="form2" class="ui large form transition hidden" action="qrLogin" method="post" style="border: 0;">
+            <div class="ui stacked segment" style="overflow: auto;">
+                <h3 class="title"> 授权中心 </h3>
+                <div class="field item" style="height: 80px">
+                    <div id="qrcode" class="ui right action left icon input" style="text-align: center;">
+                        <img id="codeimg" style="width: 60%">
+                    </div>
+                    <div class="other">返回 &nbsp;<a href="javascript:void(0);" onclick="qr_to_default()"><i class="user icon"></i>账号密码</a></div>
+                </div>
+
+            </div>
+
+            <div class="ui error message"></div>
+
+        </form>
+
         <#if RequestParameters.error?? && Session.SPRING_SECURITY_LAST_EXCEPTION??>
             <#if Session.SPRING_SECURITY_LAST_EXCEPTION.message == "Bad credentials">
                 <div class="ui red message">
@@ -123,9 +143,7 @@
         </div>
     </div>
 </div>
-<div style="text-align: center">
-    <a href="http://www.miitbeian.gov.cn/" target="_blank">粤ICP备18027057号</a>
-</div>
+
 </body>
 <script src="webjars/jquery/3.2.1/jquery.min.js" ></script>
 <script src="webjars/Semantic-UI/2.2.10/semantic.min.js" ></script>
@@ -222,7 +240,60 @@
             }
         })
     }
-    function change_default() {
+
+    /**
+     * 账号和验证码切换，点击过快可能渲染出错，加锁
+     */
+    function change_qr() {
+        if(lock) return
+        $("#form2").transition({
+            animation: 'slide left',
+            duration   : '1s',
+            onStart: function () {
+                $("#form").removeClass("visible")
+                $("#form").css("display", "none")
+            },
+            // onComplete:function () {
+            //     $("#form").addClass('transition hidden')
+            //     lock=true
+            //     $.post("getQrCode", function(data) {
+            //         $("#codeimg").attr("src", data);
+            //
+            //         // checkLoginStatus();
+            //     }  )
+            // }
+
+            onComplete:function () {
+                $("#form").addClass('transition hidden')
+                lock=true
+                $.ajax({
+                    url: "getQrCode",
+                    type: 'POST',
+                    success: function(data) {
+                        var imgURL = "data:image/png;base64," + data; // 创建一个Base64编码的URL
+                        $("#codeimg").attr('src',imgURL) // 将URL设置为图片的src
+                        checkLoginStatus();
+                    }
+                });
+            }
+        })
+    }
+
+
+    function checkLoginStatus() {
+        // 每隔一秒检查一次登录状态
+        setInterval(function() {
+            $.post("checkLoginStatus", function(data) {
+                if (data.loggedIn) {
+                    // 如果用户已登录，跳转到首页
+                    window.location.href = "home";
+                }
+            });
+        }, 1000);
+    }
+
+    
+    function phone_to_default() {
         if(!lock) return
         $("#form").transition({
             animation: 'slide left',
@@ -237,6 +308,24 @@
             }
         })
     }
+
+    function qr_to_default() {
+        if(!lock) return
+        $("#form").transition({
+            animation: 'slide left',
+            duration   : '1s',
+            onStart: function () {
+                $("#form2").removeClass("visible")
+                $("#form2").css("display", "none")
+            },
+            onComplete:function () {
+                $("#form2").addClass('transition hidden')
+                lock = false
+            }
+        })
+    }
+    
+    
     // 发送验证码
     function send_yzm() {
         if($('#form1').form('is valid', 'phone')) {
@@ -259,8 +348,6 @@
                         .transition('fade')
                 ;
             })
-
-
 
     //jquery倒计时按钮常用于验证码倒计
     function buttonCountdown($el, msNum, timeFormat) {

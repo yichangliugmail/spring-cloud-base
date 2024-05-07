@@ -27,4 +27,6 @@ public interface BaseUserRemoteService {
      */
     @RequestMapping(value = "/user/phone/{phone}", method = RequestMethod.GET)
     ResponseData<BaseUser> getUserByPhone(@PathVariable("phone") String phone);
+
+
 }

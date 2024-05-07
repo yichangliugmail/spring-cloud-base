@@ -42,6 +42,13 @@ public class PhoneAuthenticationProvider extends MyAbstractUserDetailsAuthentica
         return result;
     }
 
+    /**
+     * 获取用户信息
+     * @param phone
+     * @param authentication
+     * @return
+     * @throws AuthenticationException
+     */
     @Override
     protected UserDetails retrieveUser(String phone, Authentication authentication) throws AuthenticationException {
         UserDetails loadedUser;

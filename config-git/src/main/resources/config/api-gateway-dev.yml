@@ -3,10 +3,10 @@ server:
 
 spring:
   rabbitmq:
-    host: localhost
+    host: 120.78.166.194
     port: 5672
-    password: '000000'
-    username: fangp
+    username: admin
+    password: mimashishenme
 
 zuul:
   routes:

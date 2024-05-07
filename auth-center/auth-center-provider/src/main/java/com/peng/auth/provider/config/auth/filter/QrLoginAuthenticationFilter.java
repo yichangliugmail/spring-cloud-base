@@ -28,6 +28,7 @@ public class QrLoginAuthenticationFilter extends AbstractAuthenticationProcessin
     private boolean postOnly = true;
 
     public QrLoginAuthenticationFilter() {
+
         super(new AntPathRequestMatcher(SPRING_SECURITY_RESTFUL_LOGIN_URL, "POST"));
     }
 

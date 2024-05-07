@@ -2,11 +2,11 @@ server:
    port: 18004
 
 spring:
-   rabbitmq:
-        host: localhost
-        port: 5672
-        username: fangp
-        password: '000000'
+  rabbitmq:
+    host: 120.78.166.194
+    port: 5672
+    username: admin
+    password: mimashishenme
 
 logging:
   file: logs/mc-service.log

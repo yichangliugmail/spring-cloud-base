@@ -72,6 +72,8 @@ public class BaseUserController extends CrudController<BaseUser, BaseUserRequest
         return new ResponseData<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getMessage(), baseUser);
     }
 
+
+
     @PostMapping("/user/table")
     @Override
     protected ResponseData<TableData<BaseUser>> queryRecord(@RequestBody BaseUserRequest query) {

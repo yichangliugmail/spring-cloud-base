@@ -1,5 +1,7 @@
 # spring-cloud-base
-微服务基础框架，基于 SpringCloud 及 SpringBoot 开发。 使用 Oauth2 统一授权、认证, Oauth示例客户端使用 Vue 开发，具有用户管理、 资源管理、 角色管理等模块，后端包括授权中心、 基础数据中心（资源服务器）等应用，可作为微服务快速开发脚手架。  可通过 docker 快速构建部署。
+微服务基础框架，基于 SpringCloud 及 SpringBoot 开发。
+使用 Oauth2 统一授权、认证, Oauth示例客户端使用 Vue 开发，具有用户管理、 资源管理、 角色管理等模块，后端包括授权中心、 基础数据中心（资源服务器）等应用，可作为微服务快速开发脚手架.
+可通过 docker 快速构建部署。
   
 Demo website：http://www.mxclass.cn
 username: test  password: 123456  
@@ -7,7 +9,7 @@ phone: 13100000000 verifyCode: 1000
 
 
 ## Model
-图片待续  
+  
   
 * [api-gateway](https://github.com/fp2952/spring-cloud-base/tree/master/api-gateway)：api-gateway网关
 * [auth-center](https://github.com/fp2952/spring-cloud-base/tree/master/auth-center)：OAuth2授权中心
@@ -78,7 +80,7 @@ JDK8、 Maven、 Mysql、 Redis、Consul、 Rabbitmq、Nodejs、 Docker(可选)�
 1. git clone https://github.com/fp2952/spring-cloud-base.git
 1. Mysql导入数据： 运行main-data/schema.sql 文件；    
 2. 更改配置文件，此项目默认本地配置，更改 config-git/src/main/resource/config 下的配置文件，主要需修改数据库链接、 Redis链接、 Rabbitmq链接等；     
-3. 启动 Consul (下载地址： https://www.consul.io/downloads.html)， window下载解压完为exe可执行文件, 进入其文件夹下 cmd -> consul agent -dev 启动，此时可访问 http://localhost:8500 查看Consul Ui页面；    
+3. 启动 Consul (下载地址： https://www.consul.io/downloads.html)， cmd -> consul agent -dev 启动，此时可访问 http://localhost:8500 查看Consul Ui页面；    
 4. 启动redis、 Rabbitmq；  
 5. 依此启动 config-git/ConfigServerApplication.main(配置中心)、auth-center/auth-center-provider/AuthCenterProviderApplication.main(服务授权中心)、 api-gateway/ApiGatewayApplication.main()(网关负载中心)、 main-data/main-data-provider/MainDataApplication.main()(基础数据模块)，注意启动顺序，配置中心必须最先启动，网关和基础数据模块依赖授权模块的 jwt/key-uri point；启动后可在Consul图形界面上即可看到已注册的服务;  
 6. 前端Vue项目需node环境（https://nodejs.org/en/download/), cd web-app、安装依赖 npm install、 启动项目 npm dev run , 需更改后端接口地址， /static/config.js/window.serverconf/development  
@@ -149,27 +151,6 @@ docker-compose up [-d]
 ```
 
 ### 通过共享镜像启动  
-
-## Preview  
-* 登陆页：   
-![avatar](http://112.74.60.248:8080/image/login.png)
-  
-* 用户管理：  
-![avatar](http://112.74.60.248:8080/image/user.png)
-  
-* 角色管理：  
-![avatar](http://112.74.60.248:8080/image/role.png)
-  
-* 应用管理：  
-![avatar](http://112.74.60.248:8080/image/client.png)
-  
-* 系统管理：  
-![avatar](http://112.74.60.248:8080/image/system.png)
-  
-* 模块管理：  
-![avatar](http://112.74.60.248:8080/image/module.png)
-
-  
 
 ## 更新日志
 * 2018-06 spring security登陆验证扩展 手机验证码，二维码扫码登陆、 引入i18n国际化、 集成git配置中心、admin监控、 链路追踪、Springcloud 升级为Edgware，Consul升级为最新1.2  

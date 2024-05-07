@@ -1,6 +1,5 @@
 /*
  在 index.html 引入
- 2018-04-17
  */
 
 window.serverconf = {
